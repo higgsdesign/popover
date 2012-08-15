@@ -1,3 +1,14 @@
+/*
+* 
+* ** HDC Popover (requires jQuery)
+* ** A jQuery plugin for creating simple modal overlay popup windows 
+* 
+* The Higgs Design Co. 2012 // http://higgsdesign.com // @higgsdesign
+*
+* This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License.
+* http://creativecommons.org/licenses/by-sa/3.0/
+* 
+*/
 ;(function($) {
   
 	$.fn.popover = function(the_content,options){
@@ -20,7 +31,7 @@
 
 		var options = options ? options : default_options;
 
-		function closePopover() {
+		var closePopover = function() {
 			$('.'+options.overlayClass+', .'+options.contentClass).fadeOut(function(){
 				$(this).remove();
 			});
@@ -52,7 +63,6 @@
 
 		$('.'+options.overlayClass+', .'+options.contentClass).fadeIn(200);
 
-
 	}
+	
 })( jQuery );
-
