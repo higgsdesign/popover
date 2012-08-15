@@ -52,7 +52,8 @@
 		});
 
 		// Set Overlay to Page Height
-		overlay.height($('html').outerHeight()+'px');
+		var min_window_height = ($('html').outerHeight() > $(window).height() ? $('html').outerHeight() : $(window).height())+'px'
+		overlay.height(min_window_height);
 		contentInner.css('max-height',($(window).height()*.8)+'px');
 
 		// Construct and show

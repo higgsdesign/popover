@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>HDC Popover Demo</title>
+</head>
+<body>
+	
+	<div id="myContent">
+	
+		<h1>Hello World!</h1>
+		
+		<p>Press Esc, click &times; <em>or</em> the shaded overlay to exit</p>
+	
+	</div>
+	
+	<p id="open">Click me to popup</p>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="popover.jquery.js"></script>
+	<script>
+	$(function(){
+		
+		var content = $('#myContent').html();
+		
+		$('#open').click(function(){
+			
+			$(document).popover(content);
+			
+		});
+		
+	});
+	</script>
+</body>
+</html>
