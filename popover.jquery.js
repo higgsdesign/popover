@@ -10,60 +10,125 @@
 * 
 */
 ;(function($) {
-  
-	$.fn.popover = function(the_content,options){
+	
+	jQuery.fn.popover = function(the_content,opts){
 
-		var default_options = {
-			overlayClass: 'popover-overlay',
-			overlayStyles: 'background:#000;width:100%;height:100%;top:0;left:0;bottom:0;right:0;z-index:9998;opacity:.75;display:none;position:fixed;',
-			contentClass: 'popover-content',
-			contentStyles: 'padding:30px;background:#FFF;overflow:hidden;margin:50px auto;z-index:9999;position:relative;border-radius:3px;box-shadow:0 0 15px rgba(0,0,0,0.7);min-width:400px;max-width:80%;',
-			contentWrapperClass: 'popover-inner-wrapper',
-			contentWrapperStyles: 'margin:0 auto;overflow:hidden;overflow-y:scroll;',
-			contentOuterWrapperClass: 'popover-outer-wrapper',
-			contentOuterWrapperStyles: 'position:fixed;left:0;top:0;right:0;width:100%;',
-			closeX: {
-				show: true,
-				content: '&times;',
-				styles: {fontSize:'20px',top:'6px',right:'8px',lineHeight:1,position:'absolute',cursor:'pointer'}
-			}
-		};
+		var the_window = $(window);
+		var options = $.extend({}, $.fn.popover.defaults, opts);
+		var overlayClass = 'popover-overlay';
+		var contentClass = 'popover-content';
+		var contentOuterClass = 'popover-outer-wrapper';
+		var contentInnerClass = 'popover-inner-wrapper';
+		var popoverCloseX = 'popover-close-x';
 
-		var options = options ? options : default_options;
-
-		var closePopover = function() {
-			$('.'+options.overlayClass+', .'+options.contentClass).fadeOut(function(){
+		function closePopover() {
+			$('div.'+overlayClass+', div.'+contentClass).fadeOut(function(){
 				$(this).remove();
 			});
 		}
+		
+		// Close all existing modals
+		if (options.leaveOtherModalsOpen != false) closePopover();
 
-		var closeX = $('<span />',{	'class':'popover-close-x',
+		var closeX = $('<span />',{	'class':popoverCloseX,
 									'html': options.closeX.content,
 									'css':options.closeX.styles,
 									'click': function(){ closePopover(); }
-									})
-		var overlay = $('<div />',{'class':options.overlayClass,'style':options.overlayStyles,'click': function(){ closePopover(); }});
-		var content = $('<div />',{'class':options.contentClass,'style':options.contentStyles});
-		var contentOuter = $('<div />',{'class':options.contentOuterWrapperClass,'style':options.contentOuterWrapperStyles});
-		var contentInner = $('<div />',{'class':options.contentWrapperClass,'style':options.contentWrapperStyles});
+									});
+		var overlay = $('<div />',{
+			'class':overlayClass,
+			'css':options.overlayStyles,
+			'click': function(){ closePopover(); }
+		});
+		var content = $('<div />',{
+			'class':contentClass,
+			'css':options.contentStyles
+		});
+		var contentOuter = $('<div />',{
+			'class':contentOuterClass,
+			'css':options.contentOuterWrapperStyles
+		});
+		var contentInner = $('<div />',{
+			'class':contentInnerClass,
+			'css':options.contentWrapperStyles
+		});
 
+		if(options.allowVerticalScroll) contentInner.css({overflow:'auto',overflowX:'hidden'});
+
+		// Esc key
 		$(document).keyup(function(e){
 			if (e.keyCode == 27) closePopover();
 		});
-
+		
 		// Set Overlay to Page Height
-		var min_window_height = ($('html').outerHeight() > $(window).height() ? $('html').outerHeight() : $(window).height())+'px'
+		var min_window_height = ($('html').outerHeight() > the_window.height() ? $('html').outerHeight() : the_window.height())+'px'
 		overlay.height(min_window_height);
-		contentInner.css('max-height',($(window).height()*.8)+'px');
+		
+		// If the content is taller than the page, ensure the popover all fits within the page.
+		contentInner.css({maxHeight:(the_window.height()*.6)+'px'});
 
 		// Construct and show
-		$('html').append(overlay).append(contentOuter.html(content.append(contentInner.html(the_content).append(closeX))));
+		$('body').append(overlay).append(contentOuter.html(content.append(contentInner.html(the_content).append(closeX))));
 
 		// Inner Width
 		content.width(contentInner.children(':first').outerWidth()+60);
 
-		$('.'+options.overlayClass+', .'+options.contentClass).fadeIn(200);
+		$('div.'+overlayClass+', div.'+contentClass).fadeIn(200);
+
 
 	}
+
+	jQuery.fn.popover.defaults = {
+		overlayStyles: {
+			backgroundColor:'#000',
+			width:'100%',
+			height:'100%',
+			top:0,
+			left:0,
+			bottom:0,
+			right:0,
+			zIndex:9998,
+			opacity:.75,
+			display:'none',
+			position:'fixed'
+		},
+		contentStyles: {
+			padding:'30px',
+			backgroundColor:'#FFF',
+			overflow:'hidden',
+			margin:'50px auto',
+			zIndex:9999,
+			position:'relative',
+			borderRadius:'3px',
+			boxShadow:'0 0 15px rgba(0,0,0,0.7)',
+			minWidth:'400px',
+			maxWidth:'80%'
+		},
+		contentWrapperStyles: {
+			margin:'0 auto',
+			overflow:'hidden'
+		},
+		contentOuterWrapperStyles: {
+			position:'fixed',
+			left:0,
+			top:0,
+			right:0,
+			width:'100%'
+		},
+		allowVerticalScroll: true,
+		leaveOtherModalsOpen: false,
+		closeX: {
+			show: true,
+			content: '&times;',
+			styles: {
+				fontSize:'20px',
+				top:'6px',
+				right:'8px',
+				lineHeight:1,
+				position:'absolute',
+				cursor:'pointer'
+			}
+		}
+	};
 	
 })( jQuery );
