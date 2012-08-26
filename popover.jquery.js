@@ -63,12 +63,14 @@
 		// Set Overlay to Page Height
 		var min_window_height = ($('html').outerHeight() > the_window.height() ? $('html').outerHeight() : the_window.height())+'px'
 		overlay.height(min_window_height);
-		
-		// If the content is taller than the page, ensure the popover all fits within the page.
-		contentInner.css({maxHeight:(the_window.height()*.6)+'px'});
 
 		// Construct and show
 		$('body').append(overlay).append(contentOuter.html(content.append(contentInner.html(the_content).append(closeX))));
+		
+		
+		// If the content is taller than the page, ensure the popover all fits within the page.
+		if ((content.outerHeight()*1.2) > the_window.height()) {contentInner.css({maxHeight:(the_window.height()*.6)+'px'}); console.log('s');}
+		console.log(content.outerHeight() + ' > '+ the_window.height());
 
 		// Inner Width
 		content.width(contentInner.children(':first').outerWidth()+60);
@@ -96,7 +98,7 @@
 			padding:'30px',
 			backgroundColor:'#FFF',
 			overflow:'hidden',
-			margin:'50px auto',
+			margin:'5% auto',
 			zIndex:9999,
 			position:'relative',
 			borderRadius:'3px',
